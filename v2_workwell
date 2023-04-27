@@ -1,0 +1,92 @@
+import tkinter as tk
+
+def generate_schedule():
+    date = date_entry.get()
+    time = time_entry.get()
+    location = location_entry.get()
+    contact = contact_entry.get("1.0", tk.END).strip()
+    link = link_entry.get()
+
+    if pre_meeting_var.get():
+        pre_meeting_text = "\n*會前聯訪"
+    else:
+        pre_meeting_text = ""
+
+    if no_public_schedule_var.get():
+        schedule_text = f"{date} 市長無公開行程\n"
+    else:
+        schedule_text = f"{date} 市長公開行程\n\n{time}\n地點：{location}\n"
+        if link:
+            schedule_text += f"{link}\n"
+        schedule_text += f"聯絡人：\n{contact}{pre_meeting_text}\n"
+
+    output_text.insert(tk.END, schedule_text)
+
+def add_same_day_schedule():
+    time = time_entry.get()
+    location = location_entry.get()
+    contact = contact_entry.get("1.0", tk.END).strip()
+    link = link_entry.get()
+
+    if pre_meeting_var.get():
+        pre_meeting_text = " *會前聯訪"
+    else:
+        pre_meeting_text = ""
+
+    schedule_text = f"{time}\n地點：{location}\n"
+    if link:
+        schedule_text += f"{link}\n"
+    schedule_text += f"聯絡人：\n{contact}{pre_meeting_text}\n"
+
+    output_text.insert(tk.END, schedule_text)
+
+def undo():
+    output_text.delete("1.0", tk.END)
+
+root = tk.Tk()
+root.title("市長行程生成器")
+
+date_label = tk.Label(root, text="日期：")
+date_label.grid(row=0, column=0)
+date_entry = tk.Entry(root)
+date_entry.grid(row=0, column=1)
+
+time_label = tk.Label(root, text="標題：")
+time_label.grid(row=1, column=0)
+time_entry = tk.Entry(root)
+time_entry.grid(row=1, column=1)
+
+location_label = tk.Label(root, text="地點：")
+location_label.grid(row=2, column=0)
+location_entry = tk.Entry(root)
+location_entry.grid(row=2, column=1)
+
+link_label = tk.Label(root, text="連結：")
+link_label.grid(row=3, column=0)
+link_entry = tk.Entry(root)
+link_entry.grid(row=3, column=1)
+
+contact_label = tk.Label(root, text="聯絡人：")
+contact_label.grid(row=4, column=0)
+contact_entry = tk.Text(root, height=3, width=30)
+contact_entry.grid(row=4, column=1)
+
+generate_schedule_button = tk.Button(root, text="生成消息", command=generate_schedule)
+generate_schedule_button.grid(row=5, column=0)
+
+add_same_day_schedule_button = tk.Button(root, text="新增同日行程", command=add_same_day_schedule)
+add_same_day_schedule_button.grid(row=5, column=1)
+
+pre_meeting_var = tk.BooleanVar()
+pre_meeting_checkbutton = tk.Checkbutton(root, text="*會前聯訪", variable=pre_meeting_var)
+pre_meeting_checkbutton.grid(row=6, column=0, columnspan=2)
+
+no_public_schedule_var = tk.BooleanVar()
+no_public_schedule_checkbutton = tk.Checkbutton(root, text="市長無公開行程", variable=no_public_schedule_var)
+no_public_schedule_checkbutton.grid(row=7, column=0, columnspan=2)
+
+output_text = tk.Text(root, width=50, height=40)
+output_text.grid(row=8, column=0, columnspan=2)
+
+root.mainloop()
+
