@@ -1,0 +1,46 @@
+import tkinter as tk
+
+def generate_message():
+    date = date_entry.get()
+    title = title_entry.get()
+    location = location_entry.get()
+    contact_person = contact_entry.get()
+    
+    message = f"{date} 市長公開行程\n\n{title}\n地點：{location}\n聯絡人：{contact_person}"
+    
+    if pre_meeting_intvar.get() == 1:
+        message += "\n*會前聯訪"
+
+    output_text.delete(1.0, tk.END)
+    output_text.insert(tk.END, message)
+
+root = tk.Tk()
+root.title("首長公開行程生成器")
+
+tk.Label(root, text="日期：").grid(row=0, column=0)
+date_entry = tk.Entry(root)
+date_entry.grid(row=0, column=1)
+
+tk.Label(root, text="標題：").grid(row=1, column=0)
+title_entry = tk.Entry(root)
+title_entry.grid(row=1, column=1)
+
+tk.Label(root, text="地點：").grid(row=2, column=0)
+location_entry = tk.Entry(root)
+location_entry.grid(row=2, column=1)
+
+tk.Label(root, text="聯絡人：").grid(row=3, column=0)
+contact_entry = tk.Entry(root)
+contact_entry.grid(row=3, column=1)
+
+pre_meeting_intvar = tk.IntVar()
+pre_meeting_checkbutton = tk.Checkbutton(root, text="*會前聯訪", variable=pre_meeting_intvar)
+pre_meeting_checkbutton.grid(row=4, column=0, columnspan=2)
+
+generate_button = tk.Button(root, text="生成消息", command=generate_message)
+generate_button.grid(row=5, column=0, columnspan=2)
+
+output_text = tk.Text(root, wrap=tk.WORD, width=40, height=10)
+output_text.grid(row=6, column=0, columnspan=2)
+
+root.mainloop()
